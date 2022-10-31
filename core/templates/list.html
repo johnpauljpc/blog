@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h2>Blog Posts</h2>
+{{posts}}
+<div style="max-width: 900px;">
+    {% for post in posts %}
+
+    <a href= '{{post.get_absolute_url}}' style="text-decoration: none; color:tomato; font-weight: bolder; font-size: 24px;">{{post.title}}</a>  <br>
+    <strong>by {{post.author}} - {{post.publish|date:'M d Y, G:i A '}}</strong><br>
+    {{post.body}}
+
+    {% endfor %}
+    {% if is_paginated %}
+    <a href="?page=1" style="text-decoration: none; color:brown; font-weight: bolder;">first</a>
+    {% if page_obj.has_previous %}
+    <a href="?page={{page_obj.previous_page_number}}" style="text-decoration: none; color:brown; font-weight: bolder;"> << previous </a>
+    {% endif %}
+
+        {% for n in page_obj.paginator.page_range %}
+            {% if page_obj.number == n %}
+                <a href="?page={{n}}">{{n}}</a>
+            {% elif n > page_obj.number|add:'-3' and n < page_obj.number|add:'3' %}
+                <a href="?page={{n}}">{{n}}</a>
+            {% endif %}
+        {% endfor %}
+
+    {% if page_obj.has_next %}
+    <a href="?page={{page_obj.next_page_number}}" style="text-decoration: none; color:brown; font-weight: bolder;">Next>></a>
+    <a href="?page={{page_obj.paginator.num_pages}}" style="text-decoration: none; color:brown; font-weight: bolder;">Last</a>
+    {% endif %}
+    
+    
+
+    {% endif %}
+</div>
+{% endblock body%}
